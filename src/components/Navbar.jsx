@@ -1,17 +1,20 @@
+"use client";
+
 import Link from "next/link";
-import React from "react";
+import { useState } from "react";
 import { LuSun, LuMoon } from "react-icons/lu";
 import { Button } from "@heroui/react";
+import { useSession, signOut } from "@/lib/auth-client";
 
 const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { data: session, isPending } = useSession();
+  const user = session?.user;
 
-   const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "Browse Recips", href: "/recips" },
-    { name: "Dashboard", href: "/dashboard" },
-    { name: "Admin Panel", href: "/admin" },
-  ];
-  
+  const handleSignOut = async () => {
+    await signOut();
+  };
+
   return (
     <nav className="sticky top-0 z-50 w-full bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
@@ -32,24 +35,26 @@ const Navbar = () => {
 
         {/* User Account / Profile Section */}
         <div className="flex items-center gap-4">
-          {/* Dark Mode Toggle Placeholder */}
           <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-all">
             <LuSun size={20} />
           </button>
 
           {/* Auth Links */}
           <div className="flex items-center gap-4">
-            {/* Example: Authenticated State */}
-            <span className="text-sm">Hi, User!</span>
-            <Button variant="ghost" className="text-red-600 hover:text-red-700">
-              Sign Out
-            </Button>
-
-            {/* Example: Unauthenticated State (Commented out) */}
-            {/* <Link href="/auth/signin" className="text-sm font-medium text-green-600 transition hover:text-green-700">
-              Sign In
-            </Link> 
-            */}
+            {isPending ? (
+              <span className="text-sm text-gray-400">Loading...</span>
+            ) : user ? (
+              <>
+                <span className="text-sm">Hi, {user.name}!</span>
+                <Button onClick={handleSignOut} variant="ghost" className="text-red-600 hover:text-red-700">
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <Link href="/auth/signin" className="text-sm font-medium text-green-600 transition hover:text-green-700">
+                Sign In
+              </Link>
+            )}
           </div>
         </div>
       </div>
