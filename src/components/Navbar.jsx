@@ -4,6 +4,14 @@ import { LuSun, LuMoon } from "react-icons/lu";
 import { Button } from "@heroui/react";
 
 const Navbar = () => {
+
+   const navLinks = [
+    { name: "Home", href: "/" },
+    { name: "Browse Recips", href: "/recips" },
+    { name: "Dashboard", href: "/dashboard" },
+    { name: "Admin Panel", href: "/admin" },
+  ];
+  
   return (
     <nav className="sticky top-0 z-50 w-full bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
