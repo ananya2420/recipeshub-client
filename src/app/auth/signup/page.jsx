@@ -1,18 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { Card, Button, Link, TextField, Label, InputGroup, Input, FieldError } from "@heroui/react";
+import { Card, Button, Link, TextField, Label, InputGroup, Input, FieldError, Separator } from "@heroui/react";
 import { Description, Radio, RadioGroup } from "@heroui/react";
 
 import { Eye, EyeSlash, Person, At, ShieldKeyhole } from "@gravity-ui/icons";
-import { signUp } from "@/lib/auth-client";
+import { signUp, signIn } from "@/lib/auth-client";
 import { useRouter, useSearchParams } from "next/navigation";
+import { LuChrome } from "react-icons/lu";
 
 const SignupPage = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [role, setRole] = useState("seeker");
+    const [role, setRole] = useState("receips");
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -41,6 +42,7 @@ const SignupPage = () => {
                 email,
                 password,
                 name,
+                role,
                 user:{role:role,plan},
                 
             });
@@ -60,6 +62,10 @@ const SignupPage = () => {
         } finally {
             setIsLoading(false);
         }
+    };
+    
+    const handleGooglesignup = async () => {
+        await signIn.social({ provider: "google", callbackURL: redirectTo });
     };
 
     return (
@@ -128,17 +134,30 @@ const SignupPage = () => {
                     </TextField>
 
                     {/* Role Selection */}
-                    <div className="flex flex-col gap-4">
-                        <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Account Type</Label>
-                        <RadioGroup value={role} name="role" onValueChange={setRole} orientation="horizontal" className="flex gap-4">
-                            <Radio value="seeker">
-                                Job Seeker
-                            </Radio>
-                            <Radio value="recruiter">
-                                Recruiter
-                            </Radio>
-                        </RadioGroup>
-                    </div>
+                  <div className="flex flex-col gap-4">
+      <Label>Subscription plan</Label>
+      <RadioGroup defaultValue="receips" name="role" onChange={value=>setRole(value)}>
+        <Radio selected value="receips">
+          <Radio.Content>
+            <Radio.Control>
+              <Radio.Indicator />
+            </Radio.Control>
+            Browse Receips 
+          </Radio.Content>
+          
+        </Radio>
+        <Radio value="dashboard">
+          <Radio.Content>
+            <Radio.Control>
+              <Radio.Indicator />
+            </Radio.Control>
+            Dashboard
+          </Radio.Content>
+         
+        </Radio>
+        
+      </RadioGroup>
+    </div>
 
                     {/* Dynamic Status Badges */}
                     {error && (
@@ -173,6 +192,11 @@ const SignupPage = () => {
                     </div>
 
                 </form>
+               {/* Google Login */}
+                    <Button onClick={handleGooglesignup} className="w-full flex gap-3 rounded-xl border border-zinc-200 bg-white text-black font-semibold hover:bg-zinc-50">
+                        <LuChrome size={20} /> Google
+                    </Button>
+               
             </Card>
         </div>
     );
