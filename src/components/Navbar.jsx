@@ -1,15 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { LuSun, LuMoon } from "react-icons/lu";
 import { Button } from "@heroui/react";
 import { useSession, signOut } from "@/lib/auth-client";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const { data: session, isPending } = useSession();
-  console.log("session data in navbar",session,"is pending",isPending);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const user = session?.user;
 
   const handleSignOut = async () => {
@@ -42,7 +47,7 @@ const Navbar = () => {
 
           {/* Auth Links */}
           <div className="flex items-center gap-4">
-            {isPending ? (
+            {!isMounted || isPending ? (
               <span className="text-sm text-gray-400">Loading...</span>
             ) : user ? (
               <>
