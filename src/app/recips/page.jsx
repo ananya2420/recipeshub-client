@@ -4,9 +4,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { getAllRecips } from "@/lib/api/recipe";
 
-//import SearchRecipe from "../../components/SearchRecipe";
-//import RecipeCard from "../components/RecipeCard";
-//import SearchRecipe from "../components/SearchRecipe";
+
 import CategoryFilter from "@/components/CategoryFilter";
 import RecipeCard from "@/components/RecipeCard";
 import SearchRecipe from "@/components/SearchRecipe";
