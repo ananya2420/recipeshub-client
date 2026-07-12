@@ -27,7 +27,7 @@ export function DashboardSidebar() {
 
   return (
   <>
-  <aside>
+  <aside className="hidden w-64 shrink-0 border-r border-default p-4 lg:block">
     {navContent}
   </aside>
     <Drawer>
