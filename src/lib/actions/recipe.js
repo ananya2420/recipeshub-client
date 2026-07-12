@@ -1,0 +1,7 @@
+import { serverMutation } from "../core/server";
+
+
+
+export const createRecipe = async (newRecipeData) => {
+    return serverMutation('/api/recips', newRecipeData);
+}
