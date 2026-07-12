@@ -1,16 +1,24 @@
+import { 
 
-import {  Bell, Envelope, Gear, House, LayoutSideContentLeft, Magnifier, Person} from "@gravity-ui/icons";
-import {Button, Drawer} from "@heroui/react";
+
+  LayoutSidebarLeft, 
+  LayoutSideContentLeft, 
+  PersonFill, 
+  StarFill
+} from "@gravity-ui/icons";
+import { Button, Drawer } from "@heroui/react";
+import { ChartColumn, Plus, SquareStack } from "lucide-react";
+import { BiBasket } from "react-icons/bi";
 
 export function DashboardSidebar() {
-  const navItems = [
-    {icon: House, label: "Home"},
-    {icon: Magnifier, label: "Search"},
-    {icon: Bell, label: "Notifications"},
-    {icon: Envelope, label: "Messages"},
-    {icon: Person, label: "Profile"},
-    {icon: Gear, label: "Settings"},
-  ];
+ const navItems = [
+  { icon: ChartColumn, label: "Overview" },
+  { icon: Plus, label: "Add Recipes" },
+  { icon: SquareStack, label: "My Recipes" },
+  { icon: StarFill, label: "Favourites" },
+  { icon: BiBasket, label: "Purchased" },
+  { icon: PersonFill, label: "Profile" },
+];
 
   const navContent= <nav className="flex flex-col gap-1">
                 {navItems.map((item) => (
