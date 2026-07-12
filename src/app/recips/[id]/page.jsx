@@ -5,9 +5,17 @@ import { getRecipeById } from "@/lib/api/recipe";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import RecipeActions from "@/components/RecipeActions";
+import { createPayment } from "@/lib/actions/payment";
+
 
 const RecipeDetailsPage = async ({ params }) => {
   const { id } = await params;
+
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+
   
   // Retrieve token
   //const result = await auth.api.getToken({ headers: await headers() });
@@ -17,8 +25,14 @@ const RecipeDetailsPage = async ({ params }) => {
   //const token = typeof result === 'string' ? result : result?.token;
   //console.log(token);
 
+
+
   // Pass token to API
   const recipe = await getRecipeById(id);
+
+  // const result=await createPayment(subInfo)
+  // console.log(result);
+
 
   return (
     <div className="container mx-auto px-4 py-8">

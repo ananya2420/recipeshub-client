@@ -34,7 +34,7 @@ const SignupPage = () => {
         setSuccess("");
         setIsLoading(true);
 
-        const plan = role === 'seeker' ? 'seeker_free' : 'recruiter_free';
+        const receips = role === 'receips' ? 'receips_free' : 'dashboard_free';
         console.log(role);
 
         try {
@@ -134,30 +134,35 @@ const SignupPage = () => {
                     </TextField>
 
                     {/* Role Selection */}
-                  <div className="flex flex-col gap-4">
-      <Label>Subscription plan</Label>
-      <RadioGroup defaultValue="receips" name="role" onChange={value=>setRole(value)}>
-        <Radio selected value="receips">
-          <Radio.Content>
-            <Radio.Control>
-              <Radio.Indicator />
-            </Radio.Control>
-            Browse Receips 
-          </Radio.Content>
-          
-        </Radio>
-        <Radio value="dashboard">
-          <Radio.Content>
-            <Radio.Control>
-              <Radio.Indicator />
-            </Radio.Control>
-            Dashboard
-          </Radio.Content>
-         
-        </Radio>
-        
-      </RadioGroup>
-    </div>
+                  {/* Role Selection */}
+<div className="flex flex-col gap-4">
+  <Label>payment plan</Label>
+  {/* Added flex flex-row to make them sit side-by-side */}
+  <RadioGroup 
+    defaultValue="receips" 
+    name="role" 
+    onChange={value => setRole(value)}
+    className="flex flex-row gap-6" 
+  >
+    <Radio value="users">
+      <Radio.Content>
+        <Radio.Control>
+          <Radio.Indicator />
+        </Radio.Control>
+        Users
+      </Radio.Content>
+    </Radio>
+    {/* <Radio value="dashboard">
+      <Radio.Content>
+        <Radio.Control>
+          <Radio.Indicator />
+        </Radio.Control>
+        Dashboard
+      </Radio.Content>
+    </Radio> */}
+  </RadioGroup>
+</div>
+
 
                     {/* Dynamic Status Badges */}
                     {error && (

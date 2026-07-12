@@ -1,7 +1,8 @@
 import { stripe } from '@/lib/stripe';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import PurchaseSaver from '@/app/components/PurchaseSaver';
+import PurchaseSaver from '@/components/PurchaseSaver';
+//import PurchaseSaver from '@/app/components/PurchaseSaver';
 
 export default async function Success({ searchParams }) {
   const { session_id } = await searchParams;

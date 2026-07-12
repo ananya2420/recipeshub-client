@@ -57,14 +57,18 @@ export default function RecipeActions({ id, price, title }) {
           {isFavorite ? "Favorited" : "Save to Favorites"}
         </button>
         
-        <form action="/api/payment" method="POST" className="w-full">
+          <form action="/api/payment" method="POST">
           <input type="hidden" name="price" value={price} />
           <input type="hidden" name="title" value={title} />
           <input type="hidden" name="recipeId" value={id} />
-          <button type="submit" className="w-full flex items-center justify-center gap-2 py-3 bg-green-900 text-white rounded-lg hover:bg-black transition font-semibold">
-            <LuShoppingBag /> Purchase Details
-          </button>
-        </form>
+      <section>
+        <button type="submit" role="link" className="w-full flex items-center justify-center gap-2 py-3 bg-green-900 text-white rounded-lg hover:bg-black transition font-semibold">
+          <LuShoppingBag /> Purchase Details
+        </button>
+      </section>
+    </form>
+
+       
 
         <Link href={`/recips/${id}/report`} className="w-full flex items-center justify-center gap-2 py-3 text-black hover:text-red-600 transition text-sm">
           <LuFlag size={16} /> Report Issue

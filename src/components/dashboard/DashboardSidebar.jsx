@@ -1,5 +1,5 @@
 
-import {Bars, Bell, Envelope, Gear, House, Magnifier, Person} from "@gravity-ui/icons";
+import {  Bell, Envelope, Gear, House, LayoutSideContentLeft, Magnifier, Person} from "@gravity-ui/icons";
 import {Button, Drawer} from "@heroui/react";
 
 export function DashboardSidebar() {
@@ -12,21 +12,7 @@ export function DashboardSidebar() {
     {icon: Gear, label: "Settings"},
   ];
 
-  return (
-    <Drawer>
-      <Button variant="secondary">
-        <Bars />
-        Menu
-      </Button>
-      <Drawer.Backdrop>
-        <Drawer.Content placement="left">
-          <Drawer.Dialog>
-            <Drawer.CloseTrigger />
-            <Drawer.Header>
-              <Drawer.Heading>Navigation</Drawer.Heading>
-            </Drawer.Header>
-            <Drawer.Body>
-              <nav className="flex flex-col gap-1">
+  const navContent= <nav className="flex flex-col gap-1">
                 {navItems.map((item) => (
                   <button
                     key={item.label}
@@ -38,10 +24,31 @@ export function DashboardSidebar() {
                   </button>
                 ))}
               </nav>
+
+  return (
+  <>
+  <aside>
+    {navContent}
+  </aside>
+    <Drawer>
+      <Button className="lg:hidden" variant="secondary">
+        <LayoutSideContentLeft />
+        Sidebar
+      </Button>
+      <Drawer.Backdrop>
+        <Drawer.Content placement="left">
+          <Drawer.Dialog>
+            <Drawer.CloseTrigger />
+            <Drawer.Header>
+              <Drawer.Heading>Navigation</Drawer.Heading>
+            </Drawer.Header>
+            <Drawer.Body>
+              {navContent}
             </Drawer.Body>
           </Drawer.Dialog>
         </Drawer.Content>
       </Drawer.Backdrop>
     </Drawer>
+  </>
   );
 }

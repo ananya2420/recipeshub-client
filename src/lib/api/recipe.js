@@ -1,3 +1,5 @@
+import { serverFetch } from "../core/server";
+
 const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 
 // Helper to get headers with Authorization
@@ -39,7 +41,7 @@ export const getAllRecips = async (search = "", category = "", queryString = "")
     };
 
     const query = buildUrl(queryString);
-    const localUrl = `/recipes${query}`; // Standardized path
+    const localUrl = `/recips${query}`;
     const localData = await fetchRecipes(localUrl);
 
     if (localData) {
@@ -57,8 +59,8 @@ export const getAllRecips = async (search = "", category = "", queryString = "")
 
 // Add the token parameter here
 export const getRecipeById = async (id, token = null) => {
-    // Forced to localhost:5000
-    const localUrl = `http://localhost:5000/recipe/${id}`;
+    // BACKEND EXPECTS: /recipe/:id (singular)
+    const localUrl = `http://localhost:5000/recipe/${id}`; 
 
     try {
         const localRes = await fetch(localUrl, { cache: 'no-store' });
@@ -68,13 +70,13 @@ export const getRecipeById = async (id, token = null) => {
     } catch (error) {
         console.warn(`Local recipe fetch failed for ${localUrl}:`, error);
     }
-
     return null;
 };
 
 export const updateRecipe = async (id, data) => {
     if (!baseUrl) throw new Error("NEXT_PUBLIC_SERVER_URL is not defined");
 
+    // BACKEND EXPECTS: /recipe/:id (singular)
     const res = await fetch(`http://localhost:5000/recipe/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -88,3 +90,5 @@ export const updateRecipe = async (id, data) => {
 
     return await res.json();
 };
+
+
