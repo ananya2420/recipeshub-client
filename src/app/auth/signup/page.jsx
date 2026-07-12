@@ -27,42 +27,47 @@ const SignupPage = () => {
 
     const toggleVisibility = () => setIsVisible(!isVisible);
 
+   
     const handleSignup = async (e) => {
-        e.preventDefault();
+    e.preventDefault();
 
-        setError("");
-        setSuccess("");
-        setIsLoading(true);
+    setError("");
+    setSuccess("");
+    setIsLoading(true);
 
-        const receips = role === 'receips' ? 'receips_free' : 'dashboard_free';
-        console.log(role);
+    // 1. Determine the plan based on the role state
+    // Make sure this matches your logic requirements
+    const selectedPlan = role === 'users' ? 'user_free' : 'other_plan_free'; 
 
-        try {
-            const { data, error: authError } = await signUp.email({
-                email,
-                password,
-                name,
-                role,
-                user:{role:role,plan},
-                
-            });
-            console.log(data);
+    try {
+        const { data, error: authError } = await signUp.email({
+            email,
+            password,
+            name,
+            // 2. Use the variables defined in your scope
+            user: { 
+                role: role, 
+                plan: selectedPlan 
+            },
+        });
+        
+        console.log(data);
 
-            if (authError) {
-                setError(authError.message || "Something went wrong during signup.");
-            } else {
-                setSuccess("Account created successfully! Welcome.");
-                setName("");
-                setEmail("");
-                setPassword("");
-                router.push(redirectTo);
-            }
-        } catch (err) {
-            setError("An unexpected network error occurred.");
-        } finally {
-            setIsLoading(false);
+        if (authError) {
+            setError(authError.message || "Something went wrong during signup.");
+        } else {
+            setSuccess("Account created successfully! Welcome.");
+            // Reset form...
+            router.push(redirectTo);
         }
-    };
+    } catch (err) {
+        // 3. Log the actual error to your console to debug faster in the future
+        console.error("Signup error:", err);
+        setError("An unexpected network error occurred.");
+    } finally {
+        setIsLoading(false);
+    }
+};
     
     const handleGooglesignup = async () => {
         await signIn.social({ provider: "google", callbackURL: redirectTo });

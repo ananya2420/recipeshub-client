@@ -1,5 +1,6 @@
-//import { serverFetch, serverMutation } from "../core/server";
-import { serverMutation } from "../core/server";
+
+
+import { serverFetch, serverMutation } from "../core/server";
 
 const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 
@@ -93,15 +94,17 @@ export const updateRecipe = async (id, data) => {
 };
 
 export const getUserRecipe = async (userId) => {
-    // Guard clause: if userId is undefined, null, or empty, stop execution
     if (!userId) {
         console.warn("getUserRecipe called with undefined userId");
-        return []; // Return an empty array or handle as needed for your UI
+        return [];
     }
     
-    return await serverFetch(`/api/recips?userId=${userId}`);
+    // Remove "/api" to match your app.get("/recips", ...) route
+    return await serverFetch(`/recips?userId=${userId}`);
 };
 
+
 export const createRecipe = async (newRecipeData) => {
+   
     return serverMutation('/api/recips', newRecipeData);
 };
