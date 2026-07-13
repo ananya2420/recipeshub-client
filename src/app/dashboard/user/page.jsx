@@ -1,36 +1,139 @@
+// "use client" 
+
+// import { useSession, signOut } from '@/lib/auth-client';
+// import React, { useState, useEffect } from 'react';
+
+// import { 
+//   FileText,   // For "Published Recipes"
+//   Bookmark,   // For "Saved Favorites"
+//   Heart,      // For "Total Engagement"
+// } from '@gravity-ui/icons'; 
+// import { DashboardStats } from '@/components/dashboard/DashboardStats';
+
+// const UserDashboardHomePage = () => {
+//     const { data: session, isPending } = useSession();
+//     const [mounted, setMounted] = useState(false);
+//     const [totalEngagement, setTotalEngagement] = useState(0);
+//     const [totalFavorites, setTotalFavorites] = useState(0);
+//     const [purchasedCount, setPurchasedCount] = useState(0);
+
+//     const calculatePurchasedCount = async () => {
+//     // Replace with your actual fetch logic to get purchase count from DB
+//     // e.g., fetch(`http://localhost:5000/api/purchases/${session.user.id}`)
+//     setPurchasedCount(prev => prev + 1); 
+// };
+
+//     const calculateTotalEngagement = () => {
+//         let total = 0;
+//         for (let i = 0; i < localStorage.length; i++) {
+//             const key = localStorage.key(i);
+//             if (key && key.startsWith("likes_")) {
+//                 total += parseInt(localStorage.getItem(key) || "0");
+//             }
+//         }
+//         setTotalEngagement(total);
+//     };
+
+//     const calculateTotalFavorites = () => {
+//         const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+//         setTotalFavorites(favorites.length);
+//     };
+
+//     useEffect(() => {
+//         setMounted(true);
+//         // Initial calculations
+//         calculateTotalEngagement();
+//         calculateTotalFavorites();
+        
+//         // Event listeners
+//         window.addEventListener("purchaseChanged", calculatePurchasedCount);
+//         window.addEventListener("engagementChanged", calculateTotalEngagement);
+//         window.addEventListener("favoritesChanged", calculateTotalFavorites);
+        
+//         return () => {
+//             window.removeEventListener("purchaseChanged", calculatePurchasedCount);
+//             window.removeEventListener("engagementChanged", calculateTotalEngagement);
+//             window.removeEventListener("favoritesChanged", calculateTotalFavorites);
+//         };
+//     }, []);
+
+//     if (!mounted || isPending) {
+//         return <div className="text-4xl font-bold">Loading...</div>;
+//     }
+    
+//     const userStats = [
+//         { title: "Published Recipes", value: (1 + purchasedCount).toString(), icon: FileText },
+//         { title: "Saved Favorites", value: totalFavorites.toString(), icon: Bookmark },
+//         { title: "Total Engagement", value: totalEngagement.toString(), icon: Heart },
+//     ];
+
+//     const user = session?.user;
+    
 "use client" 
 
-import { useSession, signOut } from '@/lib/auth-client';
+import { useSession } from '@/lib/auth-client';
 import React, { useState, useEffect } from 'react';
-
-import { 
-  FileText,   // For "Published Recipes"
-  Bookmark,   // For "Saved Favorites"
-  Heart,      // For "Total Engagement"
-} from '@gravity-ui/icons'; 
+import { FileText, Bookmark, Heart } from '@gravity-ui/icons'; 
 import { DashboardStats } from '@/components/dashboard/DashboardStats';
 
 const UserDashboardHomePage = () => {
     const { data: session, isPending } = useSession();
     const [mounted, setMounted] = useState(false);
+    const [totalEngagement, setTotalEngagement] = useState(0);
+    const [totalFavorites, setTotalFavorites] = useState(0);
+    const [purchasedCount, setPurchasedCount] = useState(0);
+
+    // Fetch actual count from MongoDB
+    const calculateTotalFavorites = async () => {
+        if (!session?.user?.id) return;
+        try {
+            const res = await fetch(`http://localhost:5000/api/favorites/${session.user.id}`);
+            const data = await res.json();
+            // Assuming the API returns an array of favorites
+            setTotalFavorites(data.length);
+        } catch (error) {
+            console.error("Failed to fetch favorites count:", error);
+        }
+    };
+
+    const calculateTotalEngagement = () => {
+        let total = 0;
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith("likes_")) {
+                total += parseInt(localStorage.getItem(key) || "0");
+            }
+        }
+        setTotalEngagement(total);
+    };
 
     useEffect(() => {
         setMounted(true);
-    }, []);
+        calculateTotalEngagement();
+        calculateTotalFavorites();
+        
+        window.addEventListener("engagementChanged", calculateTotalEngagement);
+        // This listener will now trigger the database fetch
+        window.addEventListener("favoritesChanged", calculateTotalFavorites);
+        
+        return () => {
+            window.removeEventListener("engagementChanged", calculateTotalEngagement);
+            window.removeEventListener("favoritesChanged", calculateTotalFavorites);
+        };
+    }, [session]); // Add session as dependency
 
     if (!mounted || isPending) {
         return <div className="text-4xl font-bold">Loading...</div>;
     }
     
-    // Ensure you verify the exact icon names in your F12 Console
     const userStats = [
-        { title: "Published Recipes", value: "1", icon: FileText },
-        { title: "Saved Favorites", value: "2", icon: Bookmark },
-        { title: "Total Engagement", value: "1", icon: Heart },
+        { title: "Published Recipes", value: (1 + purchasedCount).toString(), icon: FileText },
+        { title: "Saved Favorites", value: totalFavorites.toString(), icon: Bookmark },
+        { title: "Total Engagement", value: totalEngagement.toString(), icon: Heart },
     ];
 
-    const user = session?.user;
-    
+     const user = session?.user;
+     
     return (
         <>
             <div>

@@ -82,6 +82,7 @@ const RecipeDetailsPage = async ({ params }) => {
             id={recipe._id} 
             price={recipe.price} 
             title={recipe.title} 
+            image={recipe.image}
           />
         </>
       ) : (
