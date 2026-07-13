@@ -40,8 +40,8 @@ export async function POST(request) {
         type: "premium",
       },
       mode: "payment",
-      success_url: `${origin}/dashboard/premium/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/dashboard/premium`,
+      success_url: `${origin}/premium/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/premium`,
     });
 
     return NextResponse.redirect(stripeSession.url, 303);
