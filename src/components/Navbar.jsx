@@ -17,6 +17,21 @@ const Navbar = () => {
 
   const user = session?.user;
 
+  const dashboardLinks={
+    user:'/dashboard/user'
+  }
+ 
+  const navLinks = [];
+  
+  if(user?.email){
+    navLinks.push(
+      {
+      label:'Dashboard',
+      href:dashboardLinks[user?.role || 'user']
+      }
+    )
+  }
+
   const handleSignOut = async () => {
     await signOut();
   };

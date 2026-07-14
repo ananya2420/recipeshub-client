@@ -52,7 +52,7 @@ export default function SuccessClient({ session, session_id }) {
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <Link href="/dashboard" className="py-3 bg-black text-white rounded-xl font-bold hover:bg-gray-800 transition">
+          <Link href="/dashboard/user" className="py-3 bg-black text-white rounded-xl font-bold hover:bg-gray-800 transition">
             Go to Dashboard →
           </Link>
           <Link href="/recips" className="py-3 bg-white border border-gray-200 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition">

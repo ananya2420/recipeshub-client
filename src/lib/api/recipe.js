@@ -104,7 +104,26 @@ export const getUserRecipe = async (userId) => {
 };
 
 
-export const createRecipe = async (newRecipeData) => {
+// export const createRecipe = async (newRecipeData) => {
    
-    return serverMutation('/api/recips', newRecipeData);
+//     return serverMutation('/api/recips', newRecipeData);
+// };
+
+export const createRecipe = async (newRecipeData) => {
+    // CHANGE THIS: Point directly to localhost:5000 
+    // instead of using the generic serverMutation which likely defaults to localhost:3000
+    const res = await fetch(`http://localhost:5000/api/recips`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newRecipeData),
+        cache: 'no-store',
+    });
+
+    if (!res.ok) {
+        const errorText = await res.text();
+        console.error("Create recipe failed:", errorText);
+        throw new Error('Failed to create recipe');
+    }
+
+    return await res.json();
 };

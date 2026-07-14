@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { RecipeProvider } from "./context/RecipeContext"; // Ensure this path is correct
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,11 +21,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="...">
-      <body>
-        <Navbar /> {/* Move the Navbar inside the body */}
+    <html lang="en">
+      {/* Applying the font variables to the body */}
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <Navbar />
         <main>
-          {children}
+          {/* Wrap children here so all pages have access to the recipes state */}
+          <RecipeProvider>
+            {children}
+          </RecipeProvider>
         </main>
         <Footer />
       </body>

@@ -31,11 +31,12 @@ export default function SigninPage() {
         setIsLoading(true);
 
         try {
-            const { error: authError } = await signIn.email({
+            const { data,error: authError } = await signIn.email({
                 email,
                 password,
                 callbackURL: redirectTo,
             });
+            console.log(data)
 
             if (authError) {
                 setError(authError.message || "Invalid email or password.");
