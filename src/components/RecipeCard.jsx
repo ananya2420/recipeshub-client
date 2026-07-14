@@ -39,7 +39,7 @@ const RecipeCard = ({ recipe, onLike }) => {
         {/* Like Section Added Below */}
         <div className="flex justify-between items-end mb-3">
          
-          <button 
+            <button 
       onClick={() => onLike?.(recipe)}
       className={`transition-colors duration-200 ${recipe.isLiked ? "text-green-500" : "text-gray-400"}`}
     >
