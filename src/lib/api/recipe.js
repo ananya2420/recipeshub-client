@@ -127,3 +127,64 @@ export const createRecipe = async (newRecipeData) => {
 
     return await res.json();
 };
+
+// Add to lib-api-recips.js
+
+
+
+// Delete a recipe
+// --- Admin API Routes ---
+
+// Fetch ALL recipes (no userId filter)
+export const getAllRecipesForAdmin = async () => {
+    try {
+        // This fetches from your Express server on port 5000
+        const res = await fetch(`http://localhost:5000/recips`, { cache: 'no-store' });
+        if (!res.ok) throw new Error("Failed to fetch all recipes");
+        return await res.json();
+    } catch (error) {
+        console.error("Error in getAllRecipesForAdmin:", error);
+        return [];
+    }
+};
+
+// Delete a recipe
+// export const deleteRecipe = async (id) => {
+//     const res = await fetch(`http://localhost:5000/recipe/${id}`, {
+//         method: 'DELETE',
+//         cache: 'no-store',
+//     });
+//     if (!res.ok) throw new Error('Failed to delete recipe');
+//     return await res.json();
+// };
+
+export const deleteRecipe = async (id) => {
+  try {
+    const res = await fetch(`http://localhost:5000/api/recipes/${id}`, {
+      method: 'DELETE',
+    });
+    
+    if (!res.ok) {
+      throw new Error("Failed to delete recipe");
+    }
+    return await res.json();
+  } catch (error) {
+    console.error("Delete Error:", error);
+  }
+};
+
+// Feature a recipe (uses your existing updateRecipe function)
+export const featureRecipe = async (id) => {
+    // Calling your existing updateRecipe function with the featured flag
+    return await updateRecipe(id, { isFeatured: true });
+};
+
+export const getFeaturedRecipes = async () => {
+    try {
+        const res = await fetch(`http://localhost:5000/recips?featured=true`, { cache: 'no-store' });
+        return await res.json();
+    } catch (error) {
+        console.error("Error fetching featured recipes:", error);
+        return [];
+    }
+};

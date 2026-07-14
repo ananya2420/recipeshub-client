@@ -18,11 +18,12 @@ const Navbar = () => {
   const user = session?.user;
 
   const dashboardLinks={
-    user:'/dashboard/user'
+    user:'/dashboard/user',
+    admin:'/dashboard/admin'
   }
  
   const navLinks = [];
-  
+
   if(user?.email){
     navLinks.push(
       {

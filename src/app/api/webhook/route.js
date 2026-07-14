@@ -4,6 +4,7 @@
 // app/api/webhook/route.js
 import { stripe } from "@/lib/stripe";
 import { MongoClient } from "mongodb";
+import { revalidatePath } from "next/cache";
 
 export async function POST(req) {
   const body = await req.text();
@@ -36,6 +37,9 @@ export async function POST(req) {
         { _id: session.metadata.userId },
         { $set: { isPremium: true } }
       );
+      // await db.collection("payments").insertOne({ ... });
+      // await db.collection("users").updateOne({ ... });
+      revalidatePath("/dashboard/user/purchased");
     } finally {
       await client.close();
     }

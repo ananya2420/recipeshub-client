@@ -1,7 +1,13 @@
 
 
 "use client";
-
+import { 
+  LayoutDashboard, 
+  Users, 
+  Utensils, 
+  FileText, 
+  CreditCard 
+} from "lucide-react";
 import { LayoutSideContentLeft, PersonFill, StarFill } from "@gravity-ui/icons";
 import { Button, Drawer } from "@heroui/react";
 import { ChartColumn, Plus, SquareStack } from "lucide-react";
@@ -24,8 +30,17 @@ export function DashboardSidebar({ user }) {
  
   const userNavLinks = userNavItems;
 
+  const adminNavLinks=[
+    { icon: LayoutDashboard, href: "/admin/overview", label: "Overview", action: () => {} },
+  { icon: Users, href: "/admin/users", label: "Manage Users", action: () => {} },
+  { icon: Utensils, href: "/admin/recipes", label: "Manage Recipes", action: () => {} },
+  { icon: FileText, href: "/admin/reports", label: "Reports", action: () => {} },
+  { icon: CreditCard, href: "/admin/transactions", label: "Transactions", action: () => {} },
+  ];
+
   const navLinkMap = {
-    user: userNavLinks
+    user: userNavLinks,
+    admin:adminNavLinks
   };
  
   // Now 'user' is available from props
