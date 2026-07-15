@@ -1,11 +1,11 @@
 'use server';
 
-import { serverMutation } from "../core/server";
+import { protectedFetch } from "../core/server";
 
 
 
 export const submitApplication=async(applicationData)=>{
-    return serverMutation('/api/applications',applicationData);
+    return protectedFetch('/api/applications',applicationData);
     
 
 }

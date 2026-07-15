@@ -1,6 +1,6 @@
 
 
-import { serverFetch, serverMutation } from "../core/server";
+import { protectedFetch, serverFetch, serverMutation } from "../core/server";
 
 const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 
@@ -103,15 +103,12 @@ export const getUserRecipe = async (userId) => {
     return await serverFetch(`/recips?userId=${userId}`);
 };
 
-
-// export const createRecipe = async (newRecipeData) => {
-   
-//     return serverMutation('/api/recips', newRecipeData);
-// };
+export const getRecips=async()=>{
+    return protectedFetch(`/api/recips`);
+}
 
 export const createRecipe = async (newRecipeData) => {
-    // CHANGE THIS: Point directly to localhost:5000 
-    // instead of using the generic serverMutation which likely defaults to localhost:3000
+    // This now only performs the fetch call to your backend
     const res = await fetch(`http://localhost:5000/api/recips`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -148,15 +145,7 @@ export const getAllRecipesForAdmin = async () => {
     }
 };
 
-// Delete a recipe
-// export const deleteRecipe = async (id) => {
-//     const res = await fetch(`http://localhost:5000/recipe/${id}`, {
-//         method: 'DELETE',
-//         cache: 'no-store',
-//     });
-//     if (!res.ok) throw new Error('Failed to delete recipe');
-//     return await res.json();
-// };
+
 
 export const deleteRecipe = async (id) => {
   try {

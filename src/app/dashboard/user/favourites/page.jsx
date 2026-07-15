@@ -7,14 +7,28 @@ export default function FavouritesPage() {
   const [favorites, setFavorites] = useState([]);
   const { data: session } = useSession(); // Get the session
 
+  // useEffect(() => {
+  //   // Only fetch if we have a user ID
+  //   if (session?.user?.id) {
+  //     fetch(`http://localhost:5000/api/favorites/${session.user.id}`)
+  //       .then(res => res.json())
+  //       .then(data => setFavorites(data));
+  //   }
+  // }, [session]); 
+
   useEffect(() => {
-    // Only fetch if we have a user ID
-    if (session?.user?.id) {
-      fetch(`http://localhost:5000/api/favorites/${session.user.id}`)
-        .then(res => res.json())
-        .then(data => setFavorites(data));
-    }
-  }, [session]); 
+  console.log("useEffect triggered. Session status:", session);
+  
+  if (session?.user?.id) {
+    console.log("Condition met: Fetching data for ID:", session.user.id);
+    fetch(`http://localhost:5000/api/favorites/${session.user.id}`)
+      .then(res => res.json())
+      .then(data => setFavorites(data))
+      .catch(err => console.error("Fetch error:", err));
+  } else {
+    console.log("Condition failed: session.user.id is missing or undefined.");
+  }
+}, [session]);
 
   const handleRemove = async (recipeId) => {
     // Ensure we use both IDs in the URL to match your server route
