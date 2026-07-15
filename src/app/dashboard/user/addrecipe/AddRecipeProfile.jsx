@@ -28,63 +28,34 @@ export default function AddRecipeForm() {
   const labelStyle = "text-sm font-semibold text-zinc-800";
   const inputStyle = "w-full rounded-xl border border-zinc-300 bg-white p-3 text-black outline-none transition-all focus:border-green-600 focus:ring-1 focus:ring-green-600";
 
-  const handleImageUpload = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
+const handleImageUpload = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
 
-    setIsUploading(true);
+  setIsUploading(true);
 
-    const formDataToUpload = new FormData();
-    formDataToUpload.append("image", file);
+  const uploadData = new FormData();
+  uploadData.append("image", file);
 
-    try {
-      const response = await fetch(
-        `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMAGE_UPLOAD_API}`,
-        {
-          method: "POST",
-          body: formDataToUpload,
-        }
-      );
+  try {
+    const response = await fetch("/api/upload", {
+      method: "POST",
+      body: uploadData,
+    });
 
-      const result = await response.json();
+    const result = await response.json();
 
-      if (result?.success && result?.data?.url) {
-        setFormData((prev) => ({ ...prev, image: result.data.url }));
-      } else {
-        alert(result?.error?.message || "Image upload failed");
-      }
-    } catch (err) {
-      alert("Upload failed");
-    } finally {
-      setIsUploading(false);
+    if (result.success) {
+      setFormData((prev) => ({ ...prev, image: result.data.url }));
+    } else {
+      alert("Upload failed: " + (result.error?.message || "Unknown error"));
     }
-  };
-
-
-  //   const handleImageUpload = async (event) => {
-  //   const file = event.target.files[0];
-  //   if (!file) return;
-  //   setIsUploading(true);
-  //   const form = new FormData();
-  //   form.append("image", file);
-  //   try {
-  //     const response = await fetch(`https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMAGE_UPLOAD_API}`, { method: 'POST', body: form });
-  //     const data = await response.json();
-  //     if (data.success) {
-  //       setFormData(prev => ({ ...prev, image: data.data.url }));
-  //       toast.success("Image uploaded!");
-  //     } else {
-  //       toast.error("Upload failed: " + (data.error?.message || "Invalid response"));
-  //     }
-  //   } catch (err) { toast.error("Upload failed"); } finally { setIsUploading(false); }
-  // };
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   addRecipe(formData);
-  //   alert("Recipe added successfully!");
-  //   router.push("/dashboard/user/myrecipes");
-  // };
+  } catch (err) {
+    alert("Upload failed. Please try again.");
+  } finally {
+    setIsUploading(false);
+  }
+};
 
   const handleSubmit = async (e) => {
   e.preventDefault();

@@ -7,6 +7,7 @@ const RecipeContext = createContext();
 
 export function RecipeProvider({ children }) {
   const [recipes, setRecipes] = useState([]);
+  const [view, setView] = useState('list');
 
   const addRecipe = (recipe) => {
     setRecipes((prev) => [
@@ -19,9 +20,6 @@ export function RecipeProvider({ children }) {
     ]);
   };
 
-//   const deleteRecipe = (id) => {
-//     setRecipes(recipes.filter(recipe => recipe.id.toString() !== id.toString()));
-//   };
 
 
 const deleteRecipe = (id) => {
@@ -30,7 +28,7 @@ const deleteRecipe = (id) => {
 
 
   return (
-    <RecipeContext.Provider value={{ recipes, addRecipe, deleteRecipe }}>
+    <RecipeContext.Provider value={{ recipes, addRecipe, deleteRecipe, view, setView }}>
       {children}
     </RecipeContext.Provider>
   );

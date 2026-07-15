@@ -22,17 +22,35 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      {/* Applying the font variables to the body */}
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Navbar />
-        <main>
-          {/* Wrap children here so all pages have access to the recipes state */}
-          <RecipeProvider>
+        {/* Wrap everything (including Sidebar) in the Provider */}
+        <RecipeProvider>
+          <Navbar />
+          <main>
+            {/* If DashboardSidebar is here, it will now correctly access the context */}
             {children}
-          </RecipeProvider>
-        </main>
-        <Footer />
+          </main>
+          <Footer />
+        </RecipeProvider>
       </body>
     </html>
   );
 }
+
+// export default function RootLayout({ children }) {
+//   return (
+//     <html lang="en">
+//       {/* Applying the font variables to the body */}
+//       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+//         <Navbar />
+//         <main>
+//           {/* Wrap children here so all pages have access to the recipes state */}
+//           <RecipeProvider>
+//             {children}
+//           </RecipeProvider>
+//         </main>
+//         <Footer />
+//       </body>
+//     </html>
+//   );
+// }
