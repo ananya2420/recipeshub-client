@@ -5,11 +5,14 @@ import { useState, useEffect } from "react";
 import { LuSun, LuMoon } from "react-icons/lu";
 import { Button } from "@heroui/react";
 import { useSession, signOut } from "@/lib/auth-client";
+import { useTheme } from "@teispace/next-themes";
+//import { useTheme } from "next-themes";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const { data: session, isPending } = useSession();
+  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     setIsMounted(true);
@@ -57,8 +60,15 @@ const Navbar = () => {
 
         {/* User Account / Profile Section */}
         <div className="flex items-center gap-4">
-          <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-all">
+          {/* <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-all">
             <LuSun size={20} />
+          </button> */}
+
+          <button 
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-all"
+          >
+            {theme === 'dark' ? <LuSun size={20} /> : <LuMoon size={20} />}
           </button>
 
           {/* Auth Links */}

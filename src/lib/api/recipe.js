@@ -1,4 +1,8 @@
+'use server'
 
+import { headers } from "next/headers";
+import * as authModule from "../auth";
+const auth = authModule.auth;
 
 import { protectedFetch, serverFetch, serverMutation } from "../core/server";
 
@@ -108,10 +112,20 @@ export const getRecips=async()=>{
 }
 
 export const createRecipe = async (newRecipeData) => {
-    // This now only performs the fetch call to your backend
+    // FIX: Access the session through the auth object's API, not as a function call
+    const session = await authModule.auth.api.getSession({
+        headers: await headers(),
+    });
+    
+    // Adjust 'token' based on where your session object stores it
+    const token = session?.session?.token; 
+
     const res = await fetch(`http://localhost:5000/api/recips`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json',
+            ...(token && { 'Authorization': `Bearer ${token}` }) 
+        },
         body: JSON.stringify(newRecipeData),
         cache: 'no-store',
     });
@@ -119,7 +133,7 @@ export const createRecipe = async (newRecipeData) => {
     if (!res.ok) {
         const errorText = await res.text();
         console.error("Create recipe failed:", errorText);
-        throw new Error('Failed to create recipe');
+        throw new Error(`Failed to create recipe: ${errorText}`);
     }
 
     return await res.json();
@@ -145,22 +159,30 @@ export const getAllRecipesForAdmin = async () => {
     }
 };
 
-
-
-export const deleteRecipe = async (id) => {
+export const deleteRecipe = async (id, token) => { // Accept token as a parameter
   try {
     const res = await fetch(`http://localhost:5000/api/recipes/${id}`, {
       method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` // Add the token here
+      },
     });
     
     if (!res.ok) {
-      throw new Error("Failed to delete recipe");
+      // This will now log the specific message from the server (e.g., "forbidden access")
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.message || "Failed to delete recipe");
     }
     return await res.json();
   } catch (error) {
     console.error("Delete Error:", error);
+    throw error; // Rethrow to let the UI handle the error
   }
 };
+
+
+
 
 // Feature a recipe (uses your existing updateRecipe function)
 export const featureRecipe = async (id) => {
@@ -177,3 +199,15 @@ export const getFeaturedRecipes = async () => {
         return [];
     }
 };
+
+export const getRecipesList = async () => {
+    const recips = await auth.api.listRecips({
+        query: {
+            sortBy: "createdAt",
+            sortDirection: "desc"
+        },
+        // This endpoint requires session cookies.
+        headers: await headers(),
+    });
+    return recips;
+}

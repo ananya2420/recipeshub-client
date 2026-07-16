@@ -4,34 +4,37 @@ import { useEffect, useState } from 'react';
 export default function RecipeReportsPage() {
     const [reports, setReports] = useState([]);
 
-   // Change your fetch calls to use the full backend URL
-const fetchReports = async () => {
-    try {
-        const res = await fetch('http://localhost:5000/api/reports');
-        if (!res.ok) throw new Error("Network response was not ok");
-        const data = await res.json();
+    const fetchReports = async () => {
+        try {
+            const res = await fetch('http://localhost:5000/reports');
+            if (!res.ok) {
+                const errorText = await res.text();
+                throw new Error(`Server error (${res.status}): ${errorText}`);
+            }
+            const data = await res.json();
+            setReports(data);
+        } catch (error) {
+            console.error("Fetch error:", error);
+        }
+    };
 
-         console.log("report", data);
-        setReports(data);
-    } catch (error) {
-        console.error("Fetch error:", error);
-    }
-};
+    useEffect(() => {
+        fetchReports();
+    }, []);
 
-const handleRemove = async (recipeId, reportId) => {
-    await fetch(`http://localhost:5000/api/admin/remove-recipe/${recipeId}/${reportId}`, { 
-        method: 'DELETE' 
-    });
-    
-};
-fetchReports();
+    const handleRemove = async (recipeId, reportId) => {
+        await fetch(`http://localhost:5000/api/admin/remove-recipe/${recipeId}/${reportId}`, { 
+            method: 'DELETE' 
+        });
+        fetchReports();
+    };
 
-const handleDismiss = async (reportId) => {
-    await fetch(`http://localhost:5000/api/admin/dismiss-report/${reportId}`, { 
-        method: 'PATCH' 
-    });
-    
-};
+    const handleDismiss = async (reportId) => {
+        await fetch(`http://localhost:5000/api/admin/dismiss-report/${reportId}`, { 
+            method: 'PATCH' 
+        });
+        fetchReports();
+    };
 
 
 

@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { RecipeProvider } from "./context/RecipeContext"; // Ensure this path is correct
+import { Providers } from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,9 +22,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {/* Wrap everything (including Sidebar) in the Provider */}
+        <Providers>
         <RecipeProvider>
           <Navbar />
           <main>
@@ -32,25 +34,9 @@ export default function RootLayout({ children }) {
           </main>
           <Footer />
         </RecipeProvider>
+        </Providers>
       </body>
     </html>
   );
 }
 
-// export default function RootLayout({ children }) {
-//   return (
-//     <html lang="en">
-//       {/* Applying the font variables to the body */}
-//       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-//         <Navbar />
-//         <main>
-//           {/* Wrap children here so all pages have access to the recipes state */}
-//           <RecipeProvider>
-//             {children}
-//           </RecipeProvider>
-//         </main>
-//         <Footer />
-//       </body>
-//     </html>
-//   );
-// }

@@ -1,53 +1,3 @@
-// import { getUserToken } from "./session";
-
-// const baseUrl = 'http://localhost:5000';
-
-// export const authHeader = async () => {
-//   const token = await getUserToken();
-//   const header = token ? {
-//     authorization: `Bearer ${token}`
-//   } : {};
-//   return header;
-// }
-
-// export const serverMutation = async (path, data, method = 'POST') => {
-//   const res = await fetch(`${baseUrl}${path}`, {
-//     method: method,
-//     headers: {
-//       'Content-Type': 'application/json',
-//       ...await authHeader() 
-//     },
-//     body: JSON.stringify(data),
-//   });
-
-//   if (!res.ok) {
-//     const errorText = await res.text();
-//     throw new Error(`Failed to fetch: ${res.statusText} at ${path}. Details: ${errorText}`);
-//   }
-
-//   return res.json();
-// }
-
-// export async function serverFetch(path) {
-//   const fullUrl = `${baseUrl}${path}`;
-
-//   console.log("FETCH DEBUG - Full URL:", fullUrl);
-
-//   const res = await fetch(fullUrl, {
-//     method: 'GET',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       ...await authHeader() // Added authHeader here so your GET requests are also authenticated
-//     },
-//     cache: 'no-store',
-//   });
-
-//   if (!res.ok) {
-//     throw new Error(`Failed to fetch: ${res.statusText} at ${fullUrl}`);
-//   }
-
-//   return res.json();
-// }
 
 
 export async function serverMutation(path, data) {
@@ -71,7 +21,22 @@ export async function serverMutation(path, data) {
         throw new Error(`Failed to fetch: ${res.statusText} at ${fullUrl}. Details: ${errorText}`);
     }
 
-    return res.json();
+   // console.log('difficulty level',res.difficultyLevel);
+
+  
+
+    return handleTitleCode(res);
+}
+
+//handle 401,404,403
+export const handleTitleCode=res=>{
+       if(res.title===401){
+     // redirect('/auth/signin')
+     redirect('/unauthorized')
+   }else if(res.title===403){
+    redirect('/forbidden')
+   }
+   return res.json();
 }
 
 export const authHeader = async () => {
@@ -88,7 +53,7 @@ export const protectedFetch=async(path)=>{
     {
         //headers:await authHeader()
     }
-    return res.json();
+    return handleTitleCode(res);
 }
 
 export async function serverFetch(path) {
@@ -109,5 +74,5 @@ export async function serverFetch(path) {
         throw new Error(`Failed to fetch: ${res.statusText} at ${fullUrl}`);
     }
 
-    return res.json();
+    return handleTitleCode(res);
 }

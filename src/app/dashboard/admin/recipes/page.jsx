@@ -1,5 +1,5 @@
 "use client";
-
+import Cookies from "js-cookie";
 import { deleteRecipe, featureRecipe, getAllRecipesForAdmin } from "@/lib/api/recipe";
 import { useEffect, useState } from "react";
 
@@ -14,14 +14,37 @@ export default function ManageRecipesPage() {
     setLoading(false);
   };
 
-  useEffect(() => {
-    fetchRecipes();
-  }, []);
+   useEffect(() => {
+        const fetchRecipes = async () => {
+            try {
+                const data = await getAllRecipesForAdmin();
+                setRecipes(data); // 2. Update state with data
+            } catch (err) {
+                console.error("Failed to fetch:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchRecipes();
+    }, []);
 
-  const handleDelete = async (id) => {
+    if (loading) return <div>Loading...</div>;
+
+
+const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this recipe?")) {
-      await deleteRecipe(id);
-      fetchRecipes();
+      // Use localStorage instead of the library
+      const token = localStorage.getItem("token"); // Make sure this key matches your login logic
+      console.log("Sending token to deleteRecipe:", token);
+
+
+      try {
+        await deleteRecipe(id, token);
+        alert("Recipe deleted successfully");
+        fetchRecipes();
+      } catch (error) {
+        alert(error.message);
+      }
     }
   };
 
@@ -35,6 +58,10 @@ export default function ManageRecipesPage() {
 
   return (
     <div className="p-6">
+       <div>
+            {/* Now 'recips' is defined and safe to use */}
+            <h2>Total Recipes: {recipes.length}</h2>
+        </div>
       <h1 className="text-2xl font-bold mb-6">Manage All Recipes</h1>
       
       <div className="overflow-x-auto">
