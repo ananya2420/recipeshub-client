@@ -18,31 +18,30 @@ export default function RecipeActions({ id, price, title }) {
     setIsFavorite(favorites.includes(id));
   }, [id]);
 
-  const toggleLike = () => {
-    const newLikes = likes + 1;
-    setLikes(newLikes);
-    localStorage.setItem(`likes_${id}`, newLikes.toString());
-    window.dispatchEvent(new Event("engagementChanged"));
-  };
-
-
-  // const toggleFavorite = async () => {
-  //   const isNowFavorite = !isFavorite;
-  //   setIsFavorite(isNowFavorite); // Optimistic update
-
-  //   if (isNowFavorite) {
-  //     // Save to MongoDB
-  //     await fetch("http://localhost:5000/api/favorites", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({ userId: "USER_ID", recipeId: id, title, image: "IMAGE_URL" }) 
-  //     });
-  //   } else {
-  //     // Remove from MongoDB
-  //     await fetch(`http://localhost:5000/api/favorites/${id}`, { method: "DELETE" });
-  //   }
-  //   window.dispatchEvent(new Event("favoritesChanged"));
+  // const toggleLike = () => {
+  //   const newLikes = likes + 1;
+  //   setLikes(newLikes);
+  //   localStorage.setItem(`likes_${id}`, newLikes.toString());
+  //   window.dispatchEvent(new Event("engagementChanged"));
   // };
+  
+  const toggleLike = async () => {
+  const newLikes = likes + 1;
+  setLikes(newLikes);
+  
+  // 1. Save to LocalStorage for immediate UI feedback
+  localStorage.setItem(`likes_${id}`, newLikes.toString());
+  
+  // 2. IMPORTANT: Persist to your database
+  await fetch("http://localhost:5000/api/likes", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId: session?.user?.id, recipeId: id })
+  });
+  
+  window.dispatchEvent(new Event("engagementChanged"));
+};
+
 
   const toggleFavorite = async () => {
     const isNowFavorite = !isFavorite;

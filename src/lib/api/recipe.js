@@ -119,7 +119,7 @@ export const createRecipe = async (newRecipeData) => {
     
     // Adjust 'token' based on where your session object stores it
     const token = session?.session?.token; 
-
+    console.log(token);
     const res = await fetch(`http://localhost:5000/api/recips`, {
         method: 'POST',
         headers: { 

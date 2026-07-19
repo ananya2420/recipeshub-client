@@ -59,12 +59,14 @@ const handleImageUpload = async (event) => {
 
   const handleSubmit = async (e) => {
   e.preventDefault();
+
+  console.log("ananya");
   
   try {
     // Call the API function
     await createRecipe(formData);
 
-    addRecipe(formData);
+   // addRecipe(formData);
     
     alert("Recipe added successfully!");
     router.push("/dashboard/user/myrecipes");
@@ -139,7 +141,7 @@ const handleImageUpload = async (event) => {
           <textarea className={inputStyle} rows={4} placeholder="Enter step-by-step instructions" value={formData.instructions} onChange={(e) => setFormData({...formData, instructions: e.target.value})} />
         </div>
 
-        <Button type="submit" className="w-full h-12 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700">
+        <Button  type="submit" className="w-full h-12 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700">
             Publish Recipe
         </Button>
       </form>
