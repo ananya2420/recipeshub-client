@@ -1,13 +1,13 @@
 "use client";
 import { useEffect, useState } from 'react';
 import RecipeCard from './RecipeCard';
-//import RecipeCard from './RecipeCard'; // Assuming your file path
+
 
 const PopularRecipesSection = () => {
   const [popular, setPopular] = useState([]);
 
  useEffect(() => {
-    fetch('http://localhost:5000/api/popular-recipes')
+    fetch('http://localhost:5000/api/recipes')
       .then(res => res.json())
       .then(data => {
         console.log("Data from API:", data); // Check your Browser Console
@@ -19,14 +19,19 @@ const PopularRecipesSection = () => {
     <section className="py-10">
       <h2 className="text-2xl font-bold mb-6">Popular Recipes</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {popular.map((item) => (
-          <div key={item._id} className="flex flex-col">
-            {/* Pass recipe details from the joined data */}
-            <RecipeCard recipe={{ ...item.recipeDetails, likesCount: item.likesCount }} />
-            <p className="text-sm mt-2 font-medium">🔥 {item.likesCount} people liked this!</p>
-          </div>
-        ))}
+  {popular.map((recipe) => (
+    <div key={recipe._id} className="flex flex-col">
+      {/* Now passing the full recipe object directly */}
+      <RecipeCard recipe={recipe} />
+      
+      {/* Displaying requirements */}
+      <div className="mt-2 text-sm font-medium">
+        <p>👤 {recipe.authorName || "Anonymous"}</p>
+        <p className="text-green-600">🔥 {recipe.likesCount || 0} Likes</p>
       </div>
+    </div>
+  ))}
+</div>
     </section>
   );
 };

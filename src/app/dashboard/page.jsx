@@ -1,9 +1,18 @@
 // src/app/dashboard/page.js
-export default function DashboardPage() {
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold">Dashboard Overview</h1>
-      <p>Welcome to your dashboard!</p>
-    </div>
-  );
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+
+export default async function DashboardRedirect() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) redirect("/auth/signin");
+
+  if (session.user.role === "admin") {
+    redirect("/dashboard/admin/overview");
+  } else {
+    redirect("/dashboard/user");
+  }
 }

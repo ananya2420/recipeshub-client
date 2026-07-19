@@ -23,7 +23,7 @@ export default function SigninPage() {
 
     const toggleVisibility = () => setIsVisible(!isVisible);
 
-    const handleSignin = async (e) => {
+const handleSignin = async (e) => {
         e.preventDefault();
 
         setError("");
@@ -31,28 +31,27 @@ export default function SigninPage() {
         setIsLoading(true);
 
         try {
-            const { data,error: authError } = await signIn.email({
-                email,
-                password,
-                callbackURL: redirectTo,
+            const { data, error: authError } = await signIn.email({ 
+                email, 
+                password 
             });
-            console.log(data)
 
             if (authError) {
                 setError(authError.message || "Invalid email or password.");
             } else {
                 setSuccess("Signed in successfully! Redirecting...");
-                setEmail("");
-                setPassword("");
-                router.push(redirectTo);
+                // Push to a landing page that handles the redirect based on role
+                router.push("/dashboard"); 
+                router.refresh(); 
             }
         } catch (err) {
             setError("An unexpected network error occurred.");
         } finally {
             setIsLoading(false);
         }
-    };
+    }; 
 
+   
     return (
         <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-zinc-950 px-4">
             <Card className="w-full max-w-md p-6 shadow-sm border border-zinc-200 dark:border-zinc-800">

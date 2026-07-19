@@ -1,9 +1,20 @@
-import { requireOrgRole } from 'better-auth/api';
-import React from 'react';
 
-const AdminDashboardLayout =async ({children}) => {
-    await requireOrgRole('admin')
-    return children;
-};
 
-export default AdminDashboardLayout;
+import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
+
+
+
+
+export default function AdminLayout({ children }) {
+  // You can fetch the user role from your auth context/server here
+  const user = { role: 'admin' }; 
+
+  return (
+    <div className="flex">
+      <DashboardSidebar user={user} />
+      <main className="flex-1 p-8">
+        {children}
+      </main>
+    </div>
+  );
+}
