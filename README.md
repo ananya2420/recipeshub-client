@@ -57,10 +57,12 @@ OPTIONAL REQUIREMENTS Recipe Bookmark Feature Recipe Rating System Recipe Analyt
 
 DATABASE ARCHITECTURE users name email image role isBlocked isPremium createdAt updatedAt recipes recipeName recipeImage category cuisineType difficultyLevel preparationTime ingredients instructions authorId authorName authorEmail likesCount isFeatured status createdAt updatedAt
 
-Live link: https://a10-recipehub-client.vercel.app
 
 favorites userEmail userId recipeId addedAt
 
 reports recipeId reporterEmail reason status createdAt payments userEmail userId amount recipeId transactionId paymentStatus paidAt
 
 WHAT TO SUBMIT Admin Email Admin Password Live Site Link Github Repository (Server) Github Repository (Client)
+
+
+Live link: https://a10-recipehub-client.vercel.app
