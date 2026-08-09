@@ -65,4 +65,8 @@ reports recipeId reporterEmail reason status createdAt payments userEmail userId
 WHAT TO SUBMIT Admin Email Admin Password Live Site Link Github Repository (Server) Github Repository (Client)
 
 
-Live link: https://a10-recipehub-client.vercel.app
+Live link: https://recipeshub-client.vercel.app
+
+Admin Email: admin@gourab.com
+
+Admin Password: Gourab1234
